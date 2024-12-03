@@ -16,7 +16,7 @@ FetchContent_Declare(
 FetchContent_Declare(
     ctre
     GIT_REPOSITORY https://github.com/hanickadot/compile-time-regular-expressions.git
-    GIT_TAG v3.9.0
+    GIT_TAG main
 )
 
 FetchContent_Declare(
@@ -49,3 +49,4 @@ endfunction()
 
 add_day(dec01)
 add_day(dec02)
+add_day(dec03)
