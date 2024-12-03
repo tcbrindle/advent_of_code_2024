@@ -20,18 +20,12 @@ FetchContent_Declare(
 )
 
 FetchContent_Declare(
-    fmt
-    GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-    GIT_TAG 11.0.2
-)
-
-FetchContent_Declare(
     unordered_dense
     GIT_REPOSITORY https://github.com/martinus/unordered_dense.git
     GIT_TAG v4.4.0
 )
 
-FetchContent_MakeAvailable(flux ctre fmt unordered_dense)
+FetchContent_MakeAvailable(flux ctre unordered_dense)
 
 add_library(aoc INTERFACE)
 target_sources(
@@ -39,7 +33,7 @@ target_sources(
     FILE_SET HEADERS
     BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}
     FILES aoc.hpp)
-target_link_libraries(aoc INTERFACE ctre::ctre fmt::fmt flux::flux unordered_dense::unordered_dense)
+target_link_libraries(aoc INTERFACE ctre::ctre flux::flux unordered_dense::unordered_dense)
 target_precompile_headers(aoc INTERFACE aoc.hpp)
 
 function(ADD_DAY DATE)

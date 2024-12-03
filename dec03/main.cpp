@@ -41,12 +41,12 @@ static_assert(part2(test_input2) == 48);
 int main(int argc, char** argv)
 {
     if (argc < 2) {
-        fmt::println(stderr, "No input");
+        std::println(stderr, "No input");
         return -1;
     }
 
     auto const input = aoc::string_from_file(argv[1]);
 
-    fmt::println("Part 1: {}", part1(input));
-    fmt::println("Part 2: {}", part2(input));
+    std::println("Part 1: {}", part1(input));
+    std::println("Part 2: {}", part2(input));
 }
