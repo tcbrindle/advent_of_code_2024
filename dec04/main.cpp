@@ -29,16 +29,13 @@ auto const parse_input = [](std::string_view input) -> grid2d {
         .height = flux::count_eq(input, '\n')};
 };
 
-auto const neighbours
-    = [](grid2d const& grid, i64 x, i64 y) -> std::array<std::string, 8> {
-    return {std::string{grid[x + 1, y], grid[x + 2, y], grid[x + 3, y]},
-            {grid[x - 1, y], grid[x - 2, y], grid[x - 3, y]},
-            {grid[x, y + 1], grid[x, y + 2], grid[x, y + 3]},
-            {grid[x, y - 1], grid[x, y - 2], grid[x, y - 3]},
-            {grid[x + 1, y + 1], grid[x + 2, y + 2], grid[x + 3, y + 3]},
-            {grid[x - 1, y + 1], grid[x - 2, y + 2], grid[x - 3, y + 3]},
-            {grid[x + 1, y - 1], grid[x + 2, y - 2], grid[x + 3, y - 3]},
-            {grid[x - 1, y - 1], grid[x - 2, y - 2], grid[x - 3, y - 3]}};
+auto const neighbours = [](grid2d const& grid, i64 x, i64 y) {
+    return flux::cartesian_power<2>(flux::ints(-1, 2))
+        .filter(flux::unpack([](i64 i, i64 j) { return !(i == 0 && j == 0); }))
+        .map(flux::unpack([&grid, x, y](i64 i, i64 j) -> std::string {
+            return {grid[x + i, y + j], grid[x + 2 * i, y + 2 * j],
+                    grid[x + 3 * i, y + 3 * j]};
+        }));
 };
 
 auto const part1 = [](grid2d const& grid) -> i64 {
