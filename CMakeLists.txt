@@ -22,7 +22,7 @@ FetchContent_Declare(
 FetchContent_Declare(
     unordered_dense
     GIT_REPOSITORY https://github.com/martinus/unordered_dense.git
-    GIT_TAG v4.4.0
+    GIT_TAG v4.5.0
 )
 
 FetchContent_MakeAvailable(flux ctre unordered_dense)
@@ -45,3 +45,4 @@ add_day(dec01)
 add_day(dec02)
 add_day(dec03)
 add_day(dec04)
+add_day(dec05)
