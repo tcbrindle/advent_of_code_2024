@@ -55,7 +55,7 @@ auto const part2
         .filter(
             [&](update_t const& u) { return !std::ranges::is_sorted(u, cmp); })
         .map([&](update_t u) {
-            std::ranges::sort(u, cmp);
+            std::ranges::nth_element(u, u.begin() + u.size() / 2, cmp);
             return u.at(u.size() / 2);
         })
         .sum();
