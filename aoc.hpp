@@ -104,6 +104,14 @@ private:
     typename clock::time_point start_ = clock::now();
 };
 
+template <typename D = std::chrono::microseconds, typename F, typename... Args>
+constexpr auto timed(F&& f, Args&&... args)
+    -> std::pair<std::invoke_result_t<F, Args...>, D>
+{
+    timer t;
+    return {std::invoke(FLUX_FWD(f), FLUX_FWD(args)...), t.elapsed<D>()};
+}
+
 } // namespace aoc
 
 #endif
