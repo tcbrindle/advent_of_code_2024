@@ -10,7 +10,7 @@ include(FetchContent)
 FetchContent_Declare(
     flux
     GIT_REPOSITORY https://github.com/tcbrindle/flux.git
-    GIT_TAG main
+    GIT_TAG pr/iterable
 )
 
 FetchContent_Declare(
@@ -48,3 +48,4 @@ add_day(dec04)
 add_day(dec05)
 add_day(dec06)
 add_day(dec07)
+add_day(dec08)
