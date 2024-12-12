@@ -5,6 +5,7 @@
 #include <array>
 #include <cassert>
 #include <chrono>
+#include <format>
 #include <fstream>
 #include <iostream>
 #include <map>
@@ -12,11 +13,21 @@
 #include <string>
 #include <string_view>
 #include <tuple>
+#include <type_traits>
+#include <utility>
 #include <vector>
+
+#include <ankerl/unordered_dense.h>
 
 #include <flux.hpp>
 
 namespace aoc {
+
+template <typename K, typename V>
+using hash_map = ankerl::unordered_dense::map<K, V>;
+
+template <typename K>
+using hash_set = ankerl::unordered_dense::set<K>;
 
 // This function is not great, but nor are the alternatives:
 //  * std::from_chars - not constexpr, requires contiguous input
@@ -112,6 +123,67 @@ constexpr auto timed(F&& f, Args&&... args)
     return {std::invoke(FLUX_FWD(f), FLUX_FWD(args)...), t.elapsed<D>()};
 }
 
+template <typename T>
+struct vec2_t {
+    T x = T{};
+    T y = T{};
+
+    friend auto operator==(vec2_t const& lhs, vec2_t const& rhs) -> bool
+        = default;
+    friend auto operator<=>(vec2_t const& lhs, vec2_t const& rhs) = default;
+
+    friend constexpr auto operator+=(vec2_t& lhs, vec2_t const& rhs) -> vec2_t&
+    {
+        lhs.x += rhs.x;
+        lhs.y += rhs.y;
+        return lhs;
+    }
+
+    friend constexpr auto operator-=(vec2_t& lhs, vec2_t const& rhs) -> vec2_t&
+    {
+        lhs.x -= rhs.x;
+        lhs.y -= rhs.y;
+        return lhs;
+    }
+
+    friend constexpr auto operator+(vec2_t lhs, vec2_t const& rhs) -> vec2_t
+    {
+        return lhs += rhs;
+    }
+
+    friend constexpr auto operator-=(vec2_t lhs, vec2_t const& rhs) -> vec2_t
+    {
+        return lhs -= rhs;
+    }
+};
+
 } // namespace aoc
+
+template <typename T>
+struct ankerl::unordered_dense::hash<aoc::vec2_t<T>> {
+    using is_avalanching = void;
+
+    [[nodiscard]] auto operator()(aoc::vec2_t<T> const& v) const noexcept
+        -> uint64_t
+    {
+        if constexpr (std::has_unique_object_representations_v<
+                          aoc::vec2_t<T>>) {
+            return detail::wyhash::hash(&v, sizeof(v));
+        } else {
+            return hash<std::pair<T, T>>{}(std::pair<T, T>(v.x, v.y));
+        }
+    }
+};
+
+template <typename T, typename CharT>
+struct std::formatter<aoc::vec2_t<T>, CharT> {
+    constexpr auto parse(std::format_parse_context& ctx) { return ctx.begin(); }
+
+    constexpr auto format(const aoc::vec2_t<T>& v,
+                          std::format_context& ctx) const
+    {
+        return std::format_to(ctx.out(), "({}, {})", v.x, v.y);
+    }
+};
 
 #endif
