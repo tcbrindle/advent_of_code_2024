@@ -155,6 +155,12 @@ struct vec2_t {
     {
         return lhs -= rhs;
     }
+
+    friend constexpr auto operator*(T const& scalar, vec2_t const& vec)
+        -> vec2_t
+    {
+        return {vec.x * scalar, vec.y * scalar};
+    }
 };
 
 } // namespace aoc
